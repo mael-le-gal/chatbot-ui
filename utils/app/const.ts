@@ -5,11 +5,16 @@ export const DEFAULT_SYSTEM_PROMPT =
 export const OPENAI_API_HOST =
   process.env.OPENAI_API_HOST || 'https://api.openai.com';
 
+export const VLLM_MISTRAL_HOST = process.env.VLLM_MISTRAL_HOST
+export const VLLM_LLAMA_HOST = process.env.VLLM_LLAMA_HOST
+export const VLLM_VIGNOGNE_HOST = process.env.VLLM_VIGNOGNE_HOST
+export const VLLM_ALFRED_HOST = process.env.VLLM_ALFRED_HOST
+
 export const DEFAULT_TEMPERATURE = 
   parseFloat(process.env.NEXT_PUBLIC_DEFAULT_TEMPERATURE || "1");
 
 export const OPENAI_API_TYPE =
-  process.env.OPENAI_API_TYPE || 'openai';
+  process.env.OPENAI_API_TYPE || 'vllm';
 
 export const OPENAI_API_VERSION =
   process.env.OPENAI_API_VERSION || '2023-03-15-preview';

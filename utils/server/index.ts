@@ -1,5 +1,5 @@
 import { Message } from '@/types/chat';
-import { OpenAIModel } from '@/types/openai';
+import {OpenAIModel, UrlFromModel} from '@/types/openai';
 
 import { AZURE_DEPLOYMENT_ID, OPENAI_API_HOST, OPENAI_API_TYPE, OPENAI_API_VERSION, OPENAI_ORGANIZATION } from '../app/const';
 
@@ -30,14 +30,15 @@ export const OpenAIStream = async (
   key: string,
   messages: Message[],
 ) => {
-  let url = `${OPENAI_API_HOST}/v1/chat/completions`;
-  if (OPENAI_API_TYPE === 'azure') {
-    url = `${OPENAI_API_HOST}/openai/deployments/${AZURE_DEPLOYMENT_ID}/chat/completions?api-version=${OPENAI_API_VERSION}`;
-  }
+  let host = UrlFromModel(model)
+  let url = `${host}/v1/chat/completions`;
   const res = await fetch(url, {
     headers: {
       'Content-Type': 'application/json',
       ...(OPENAI_API_TYPE === 'openai' && {
+        Authorization: `Bearer ${key ? key : process.env.OPENAI_API_KEY}`
+      }),
+      ...(OPENAI_API_TYPE === 'vllm' && {
         Authorization: `Bearer ${key ? key : process.env.OPENAI_API_KEY}`
       }),
       ...(OPENAI_API_TYPE === 'azure' && {
@@ -50,6 +51,7 @@ export const OpenAIStream = async (
     method: 'POST',
     body: JSON.stringify({
       ...(OPENAI_API_TYPE === 'openai' && {model: model.id}),
+      ...(OPENAI_API_TYPE === 'vllm' && {model: model.id}),
       messages: [
         {
           role: 'system',
@@ -77,7 +79,7 @@ export const OpenAIStream = async (
       );
     } else {
       throw new Error(
-        `OpenAI API returned an error: ${
+        `OpenAI API returned an error: ${res.status} ${
           decoder.decode(result?.value) || result.statusText
         }`,
       );
