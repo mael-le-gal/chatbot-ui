@@ -32,6 +32,17 @@ export const OpenAIStream = async (
 ) => {
   let host = UrlFromModel(model)
   let url = `${host}/v1/chat/completions`;
+
+  if (model.supportSystemPrompt) {
+    messages = [
+      {
+        role: 'system',
+        content: systemPrompt,
+      },
+      ...messages,
+    ]
+  }
+
   const res = await fetch(url, {
     headers: {
       'Content-Type': 'application/json',
@@ -52,13 +63,7 @@ export const OpenAIStream = async (
     body: JSON.stringify({
       ...(OPENAI_API_TYPE === 'openai' && {model: model.id}),
       ...(OPENAI_API_TYPE === 'vllm' && {model: model.id}),
-      messages: [
-        {
-          role: 'system',
-          content: systemPrompt,
-        },
-        ...messages,
-      ],
+      messages,
       max_tokens: 1000,
       temperature: temperature,
       stream: true,

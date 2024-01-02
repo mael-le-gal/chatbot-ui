@@ -1,9 +1,5 @@
 import {
-  OPENAI_API_HOST,
-  OPENAI_API_TYPE,
-  OPENAI_API_VERSION,
-  OPENAI_ORGANIZATION, VLLM_ALFRED_HOST,
-  VLLM_LLAMA_HOST, VLLM_MISTRAL_HOST, VLLM_VIGNOGNE_HOST
+  ALL_HOSTS,
 } from '@/utils/app/const';
 
 import {OpenAIModel, OpenAIModelID, OpenAIModels, UrlFromModel} from '@/types/openai';
@@ -18,7 +14,7 @@ const handler = async (req: Request): Promise<Response> => {
       key: string;
     };
 
-    let hosts = [VLLM_LLAMA_HOST, VLLM_MISTRAL_HOST, VLLM_VIGNOGNE_HOST, VLLM_ALFRED_HOST].filter(x => x != undefined && x != "");
+    let hosts = ALL_HOSTS.filter(x => x != undefined && x != "");
     let allModels: OpenAIModel[] = [];
 
     for (const host of hosts) {
