@@ -43,10 +43,10 @@ const handler = async (req: Request): Promise<Response> => {
 
       const models: OpenAIModel[] = json.data
         .map((model: any) => {
-          const model_name = model.id;
-          for (const [key, value] of Object.entries(OpenAIModelID)) {
-            if (value === model_name) {
-              let name = OpenAIModels[value].name
+          for (const [key, value] of Object.entries(OpenAIModels)) {
+            console.log(`Comparing ${key} with ${JSON.stringify(value)} and model ${JSON.stringify(model)}`)
+            if (value.name === model.id) {
+              let name = value.name
               return {
                 id: model.id,
                 name,

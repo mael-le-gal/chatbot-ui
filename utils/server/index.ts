@@ -1,5 +1,5 @@
 import { Message } from '@/types/chat';
-import {OpenAIModel, UrlFromModel} from '@/types/openai';
+import {NameFromModel, OpenAIModel, OpenAIModels, UrlFromModel} from '@/types/openai';
 
 import { AZURE_DEPLOYMENT_ID, OPENAI_API_HOST, OPENAI_API_TYPE, OPENAI_API_VERSION, OPENAI_ORGANIZATION } from '../app/const';
 
@@ -31,6 +31,8 @@ export const OpenAIStream = async (
   messages: Message[],
 ) => {
   let host = UrlFromModel(model)
+  let model_name = NameFromModel(model)
+  console.info(`URL for ${model.id} is ${host}`)
   let url = `${host}/v1/chat/completions`;
 
   if (model.supportSystemPrompt) {
@@ -61,8 +63,7 @@ export const OpenAIStream = async (
     },
     method: 'POST',
     body: JSON.stringify({
-      ...(OPENAI_API_TYPE === 'openai' && {model: model.id}),
-      ...(OPENAI_API_TYPE === 'vllm' && {model: model.id}),
+      model: model_name,
       messages,
       max_tokens: 1000,
       temperature: temperature,

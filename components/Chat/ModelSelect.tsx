@@ -3,7 +3,7 @@ import { useContext } from 'react';
 
 import { useTranslation } from 'next-i18next';
 
-import { OpenAIModel } from '@/types/openai';
+import {DefaultModel, OpenAIModel, OpenAIModels} from '@/types/openai';
 
 import HomeContext from '@/pages/api/home/home.context';
 
@@ -21,7 +21,9 @@ export const ModelSelect = () => {
       handleUpdateConversation(selectedConversation, {
         key: 'model',
         value: models.find(
-          (model) => model.id === e.target.value,
+          (model) => {
+              model.id === e.target.value
+          },
         ) as OpenAIModel,
       });
   };
@@ -44,7 +46,7 @@ export const ModelSelect = () => {
               value={model.id}
               className="dark:bg-[#343541] dark:text-white"
             >
-              {model.id === defaultModelId
+              {model.id === DefaultModel.id
                 ? `Default (${model.name})`
                 : model.name}
             </option>
