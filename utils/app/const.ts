@@ -3,16 +3,14 @@ export const DEFAULT_SYSTEM_PROMPT =
   "You are a smart bot assistant. Follow the user's instructions carefully. Respond using markdown.";
 
 export const OPENAI_API_HOST =
-  process.env.OPENAI_API_HOST || 'https://api.openai.com';
+  process.env.OPENAI_API_HOST || '';
 
-export const VLLM_01_HOST = process.env.VLLM_01_HOST
-export const VLLM_01_MODEL = process.env.VLLM_01_MODEL || 'mistralai/Mistral-7B-Instruct-v0.2'
-export const VLLM_02_HOST = process.env.VLLM_02_HOST
-export const VLLM_02_MODEL = process.env.VLLM_02_MODEL || '/meta-llama/Llama-2-13b-chat-hf'
-export const VLLM_03_HOST = process.env.VLLM_03_HOST
-export const VLLM_03_MODEL = process.env.VLLM_03_MODEL || '/OVHcloud/Mixtral-8x7B-Instruct-v0.1-AWQ'
-
-export const ALL_HOSTS = [VLLM_01_HOST, VLLM_02_HOST, VLLM_03_HOST]
+export const MIXTRAL_8x7B_URL = 'https://mixtral-8x7b-instruct-v01.endpoints.kepler.ai.cloud.ovh.net/api/openai_compat'
+export const LLAMA2_13B_URL = 'https://llama-2-13b-chat-hf.endpoints.kepler.ai.cloud.ovh.net/api/openai_compat'
+export const MISTRAL_7B_URL = 'https://mistral-7b-instruct-v02.endpoints.kepler.ai.cloud.ovh.net/api/openai_compat'
+export const LLAMA3_70B_URL = 'https://llama-3-70b-instruct.endpoints.kepler.ai.cloud.ovh.net/api/openai_compat'
+export const LLAMA3_8B_URL = 'https://llama-3-8b-instruct.endpoints.kepler.ai.cloud.ovh.net/api/openai_compat'
+export const ALL_HOSTS = [MIXTRAL_8x7B_URL, LLAMA2_13B_URL, MISTRAL_7B_URL, LLAMA3_70B_URL, LLAMA3_8B_URL]
 
 export const DEFAULT_TEMPERATURE = 
   parseFloat(process.env.NEXT_PUBLIC_DEFAULT_TEMPERATURE || "1");

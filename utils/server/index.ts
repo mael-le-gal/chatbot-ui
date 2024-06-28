@@ -1,5 +1,5 @@
 import { Message } from '@/types/chat';
-import {NameFromModel, OpenAIModel, OpenAIModels, UrlFromModel} from '@/types/openai';
+import {OpenAIModel, OpenAIModels, UrlFromModel} from '@/types/openai';
 
 import { AZURE_DEPLOYMENT_ID, OPENAI_API_HOST, OPENAI_API_TYPE, OPENAI_API_VERSION, OPENAI_ORGANIZATION } from '../app/const';
 
@@ -31,19 +31,17 @@ export const OpenAIStream = async (
   messages: Message[],
 ) => {
   let host = UrlFromModel(model)
-  let model_name = NameFromModel(model)
-  console.info(`URL for ${model.id} is ${host}`)
+  let model_name = model.name
+  console.info(`URL for ${model.id} ${model.name} is ${host}`)
   let url = `${host}/v1/chat/completions`;
 
-  if (model.supportSystemPrompt) {
-    messages = [
-      {
-        role: 'system',
-        content: systemPrompt,
-      },
-      ...messages,
-    ]
-  }
+  messages = [
+    {
+      role: 'system',
+      content: systemPrompt,
+    },
+    ...messages,
+  ]
 
   const res = await fetch(url, {
     headers: {
@@ -73,7 +71,6 @@ export const OpenAIStream = async (
 
   const encoder = new TextEncoder();
   const decoder = new TextDecoder();
-
   if (res.status !== 200) {
     const result = await res.json();
     if (result.error) {
@@ -99,6 +96,9 @@ export const OpenAIStream = async (
           const data = event.data;
 
           try {
+            if (data === "[DONE]") {
+              return;
+            }
             const json = JSON.parse(data);
             if (json.choices[0].finish_reason != null) {
               controller.close();
